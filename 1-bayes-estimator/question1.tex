@@ -1,0 +1,61 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{enumerate}
+\usepackage{fancyhdr}
+
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{FTML 2025 Project}
+\lhead{Fundamentals of Machine Learning Theory}
+\cfoot{\thepage}
+
+% Theorem environments
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{\textbf{Foundations of Machine Learning Theory}\\
+\large Mathematical Analysis of Bayes Optimal Prediction, Loss Functions, and OLS}
+\author{FTML 2025 Project}
+\date{\today}
+
+\begin{document}
+
+\section{Bayes estimator and Bayes risk}
+\subsection{Question 1}
+
+\begin{example}[Temperature-based Energy Consumption Prediction]
+Let us consider predicting daily energy consumption based on ambient temperature:
+\begin{itemize}
+    \item \textbf{Input space:} $\mathcal{X} = [-20, 40]$ (temperature in °C)
+    \item \textbf{Output space:} $\mathcal{Y} = \mathbb{R}_+$ (energy consumption in kWh)
+    \item \textbf{Joint distribution:} $(X, Y) \sim \mathbb{P}$ where $X \sim \text{Uniform}(0, 30)$ and $Y|X = x \sim \mathcal{N}(50 - x, 4)$
+    \item \textbf{Loss function:} Squared loss $\ell(y, \hat{y}) = (y - \hat{y})^2$
+\end{itemize}
+
+\begin{corollary}[Squared Loss Case]
+As seen in the lecture notes, for squared loss $\ell(y, \hat{y}) = (y - \hat{y})^2$, the Bayes optimal predictor is:
+\[f^*(x) = \mathbb{E}[Y|X = x]\]
+\end{corollary}
+
+\textbf{Bayes Optimal Predictor:}
+\[f^*(x) = \mathbb{E}[Y|X = x] = 50 - x\]
+
+
+\textbf{Bayes Risk (using lecture notes formula):}
+\[R^* = \mathbb{E}_{X,Y}[(Y - f^*(X))^2] = \mathbb{E}_{X,Y}[(Y - (50 - X))^2] = \mathbb{E}[\sigma^2] = 4\]
+\end{example}
+
+\end{document}
