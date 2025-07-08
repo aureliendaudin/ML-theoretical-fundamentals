@@ -1,0 +1,123 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{enumerate}
+\usepackage{fancyhdr}
+
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{FTML 2025 Project}
+\lhead{Fundamentals of Machine Learning Theory}
+\cfoot{\thepage}
+
+% Theorem environments
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{\textbf{Foundations of Machine Learning Theory}\\
+\large Mathematical Analysis of Bayes Optimal Prediction, Loss Functions, and OLS}
+\author{FTML 2025 Project}
+\date{\today}
+
+\begin{document}
+
+\section{Bayes Risk with Absolute Loss}
+\subsection{Question 0}
+
+\begin{enumerate}
+  \item Let \( f : \mathbb{R} \to \mathbb{R} \) such that
+  \[
+    f(x) = x^3
+  \]
+  \[
+    f'(x) = 3x^2, \quad f'(0) = 0, \quad f''(x) = 6x, \quad f''(0) = 0
+  \]
+  \[
+    For x < 0: f(x) = x³ < 0, For x > 0: f(x) = x³ > 0
+  \]
+  Therefore, f is strictly increasing around x = 0, making it an inflection point rather than a
+local extremum
+\end{enumerate}
+
+\subsection{Question 1}
+
+\begin{enumerate}
+  \item Let \(Y\) be a random variable with
+  \[
+    P(Y=0) = 0.1, \quad P(Y=1) = 0.9
+  \]
+  \[
+    f^*_{\text{squared}} = \mathbb{E}[Y] = 0.1 \times 0 + 0.9 \times 1 = 0.9
+  \]
+
+  \item Set
+  \[
+    h_1 = 0.9 \quad (\text{conditional mean})
+  \]
+  \[
+    h_2 = 1 \quad (\text{empirical median})
+  \]
+
+  \item We want to calculate the absolute risk \( R_{\text{absolute}}(h) = \mathbb{E}[|Y - h|] \)
+
+  \[
+    R_{\text{absolute}}(h_1) = 0.1 \times |0 - 0.9| + 0.9 \times |1 - 0.9| = 0.09 + 0.09 = 0.18 = R_{\text{absolute}}(f^*_{\text{squared}})
+  \]
+
+  \[
+    R_{\text{absolute}}(h_2) = 0.1 \times |0 - 1| + 0.9 \times |1 - 1| = 0.1
+  \]
+
+  \item Conclusion
+  \[
+    R_{\text{absolute}}(h_2) < R_{\text{absolute}}(f^*_{\text{squared}}) = 0.18
+  \]
+
+  \item The estimator \( h \) is 1
+
+  \item
+  \[
+    f^*_{\text{absolute}}(x) = \arg \min_{z \in \mathbb{R}} g(z)
+  \]
+\end{enumerate}
+
+\subsection{Question 2}
+\begin{align*}
+&\text{We want to show that the minimizer of } g(z) \text{ is the median of the distribution } Y|X=x. \\[6pt]
+& g(z) \text{ is a convex function: it is a weighted average of convex functions } |y-z| \quad (\text{see part 2.3.1}) \\[6pt]
+&\Rightarrow \text{every local minimum is a global minimum} \\[6pt]
+&\text{So we can find the minimum of } g(z) \\[6pt]
+& g(z) = \int_{-\infty}^{+\infty} |y-z|\, p_{Y|X=x}(y) \, dy \\[6pt]
+&\frac{d}{dz} |y-z| = \begin{cases}
+-1 & y > z \\
+1 & y < z \\
+0 & y = z
+\end{cases} \quad \text{with} \quad |y-z| = \begin{cases}
+y - z & y > z, \quad (y-z)' = -1 \\
+z - y & z > y, \quad (z-y)' = 1
+\end{cases} \\[12pt]
+&\Rightarrow \delta'(z) = \int_{y < z} p(y) \, dy - \int_{y > z} p(y) \, dy = P(Y < z | X = x) - P(Y > z | X = x) \\[6pt]
+&= P(Y < z | X = x) - 1 + P(Y < z | X = x) = 2 P(Y < z | X = x) - 1 \\[6pt]
+&= 2 F(z) - 1 \\[6pt]
+&\delta'(z^*) = 0 \\[6pt]
+&\Rightarrow 2 F(z^*) - 1 = 0 \\[6pt]
+&\Rightarrow F(z^*) = \frac{1}{2} = 0.5 \\[6pt]
+&\Rightarrow z^* \text{ is the median of } Y|X=x \\[6pt]
+&\delta''(z) = 2 p(Y = z | X = x) > 0 \Rightarrow z^* \text{ is indeed a local minimum} \\[6pt]
+&\Rightarrow f_{\text{absolute}}^*(x) = \arg \min_{z \in \mathbb{R}} g(z) = z = \text{median}(Y|X=x)
+\end{align*}
+
+
+\end{document}
