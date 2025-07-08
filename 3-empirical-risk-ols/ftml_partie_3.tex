@@ -1,0 +1,201 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{enumerate}
+\usepackage{fancyhdr}
+
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{FTML 2025 Project}
+\lhead{Fundamentals of Machine Learning Theory}
+\cfoot{\thepage}
+
+% Theorem environments
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{\textbf{Foundations of Machine Learning Theory}\\
+\large Mathematical Analysis of Bayes Optimal Prediction, Loss Functions, and OLS}
+\author{FTML 2025 Project}
+\date{\today}
+
+\begin{document}
+\setcounter{section}{2}
+\section{Expected Value of Empirical Risk for OLS}
+\setcounter{subsection}{3}
+\subsection{Question 1}
+The Bayes estimator under squared loss is $\mathbb{E}[y \mid X = x]$:
+\begin{align}
+f^*(x) &= \mathbb{E}[y \mid X = x] \\
+&= \mathbb{E}[X\theta + \xi \mid X = x] \\
+&= x\theta + \mathbb{E}[\xi \mid X = x] \\
+&= x\theta + 0 \\
+&= x\theta
+\end{align}
+
+Because $\mathbb{E}[\xi \mid X = x] = 0$.
+
+The Bayes risk is defined as the expected squared loss with respect to the joint distribution of $(X, Y)$:
+\begin{align}
+R(f^*) &= \mathbb{E}[(Y - f^*(X))^2] \\
+&= \mathbb{E}[(Y - X\theta)^2] \\
+&= \mathbb{E}[(X\theta + \varepsilon - X\theta)^2] \\
+&= \mathbb{E}[\varepsilon^2] \\
+&= \sigma^2 
+\end{align}
+
+We know from Proposition 1 that:
+\begin{equation}
+\mathbb{E}[R_n(\hat{\theta})] = \frac{n - d}{n} \sigma^2 \label{eq:12}
+\end{equation}
+
+And we know that $\frac{n - d}{n} < 1$:
+\[
+=> \mathbb{E}[R_n(\hat{\theta})] < \sigma^2.
+\]
+
+Analysis:
+\begin{itemize}
+    \item When $d < n$ , the Empirical Risk is closer to the Bayes Risk.
+    \item When $d$ is large, the Empirical Risk is lower than the Bayes risk.
+\end{itemize}
+
+\setcounter{subsection}{3}
+\subsection{Question 2}
+We need to prove that:
+\begin{align}
+\mathbb{E} [R_n(\hat{\theta})] &= \mathbb{E}_\xi \left[ \frac{1}{n} \|(I_n - X(X^T X)^{-1} X^T) \epsilon \|^2 \right].
+\end{align}
+
+We have:
+\begin{align}
+\mathbb{E} [R_n(\hat{\theta})] &= \mathbb{E} \left[ \frac{1}{n} \|y - X\hat{\theta}\|^2 \right] \\
+&= \mathbb{E} \left[ \frac{1}{n} \|y - X(X^T X^{-1}) X^T y\|^2 \right] \\
+&= \mathbb{E} \left[ \frac{1}{n} \|(I_n - X(X^T X^{-1}) X^T) y\|^2 \right] \\
+&= \mathbb{E} \left[ \frac{1}{n} \|(I_n - X(X^T X^{-1}) X^T) (X\theta + \xi)\|^2 \right] \\
+&= \mathbb{E} \left[ \frac{1}{n} \|(I_n - X(X^T X^{-1}) X^T)X\theta + (I_n - X(X^T X^{-1}) X^T) \xi\|^2 \right] \\
+\end{align}
+But 
+\begin{align}
+(I_n - X(X^T X^{-1}) X^T)X\theta = 0
+\end{align}
+So,
+\begin{align}
+\mathbb{E} [R_n(\hat{\theta})] &= \mathbb{E} \left[ \frac{1}{n} \| 0 + (I_n - X(X^T X^{-1}) X^T) \xi\|^2 \right]\\
+&= \mathbb{E} \left[ \frac{1}{n} \|(I_n - X(X^T X^{-1}) X^T) \xi\|^2 \right]
+\end{align}
+
+\setcounter{subsection}{3}
+\subsection{Question 3}
+Let \( A \in \mathbb{R}^{n \times n} \) and \( i, j \in [1, n] \).
+\begin{align}
+\text{tr}(M) &= \sum_{i=1}^{n} M_{ii} \\
+(A^\top A)_{jj} &= \sum_{k=1}^{n} (A^\top)_{ji} A_{ij}\\
+\end{align}
+But, $A_{ji}^T = A_{ij}$
+\begin{align}
+=> (A^T A)_{jj} &= \sum_{i=1}^n A_{ij} A_{ij} \\
+&= \sum_{i=1}^n A_{ij}^2
+\end{align}
+
+\begin{align}
+\text{tr}(A^T A) &= \sum_{j=1}^n (A^{T} A)_{jj} \\
+&= \sum_{i=1}^n \sum_{j=1}^n A_{ij}^2 \\
+&= \sum_{(i,j) \in [1,n]^2} A_{ij}^2
+\end{align}
+
+\setcounter{subsection}{3}
+\subsection{Question 4}
+We should prove that:
+\begin{align}
+\mathbb{E}_\xi \left[ \frac{1}{n} \|A\xi\|^2 \right] &= \frac{\sigma^2}{n} \text{tr}(A^T A)
+\end{align}
+
+\begin{align}
+\mathbb{E}_\xi \left[ \frac{1}{n} \|A\xi\|^2 \right] &= \frac{1}{n} \mathbb{E}_\xi \left[ \|A\xi\|^2 \right] \\
+&= \frac{1}{n} \mathbb{E}_\xi \left[ (A\xi)^T (A\xi) \right] \\
+&= \frac{1}{n} \mathbb{E}_\xi \left[ \xi^T A^T A \xi \right] \\
+&= \frac{1}{n} \mathbb{E}_\xi \left[ \xi^T Q\xi \right] \\
+\end{align}
+With Q = $A^T A$
+\begin{align}
+=> \mathbb{E}_\xi \left[ \frac{1}{n} \|A\xi\|^2 \right] &= \frac{1}{n} \sigma^2 \text{tr}(Q)\\
+&= \frac{\sigma^2}{n} \text{tr}(A^T A)
+\end{align}
+
+\setcounter{subsection}{3}
+\subsection{Question 5}
+We know that:
+\begin{align}
+A &= I_n - X(X^T X)^{-1} X^T. \\
+A^T &= (I_n - X(X^T X)^{-1} X^T)^T \\
+&= I_n^T - X^T ((X^T X)^{-1})^T (X^T)^T \\
+&= I_n - X^T ((X^T X)^T)^{-1} X \\
+&= I_n - X^T (X^T X)^{-1} X \\
+A^T A &= (I_n - X^T (X^T X)^{-1} X)(I_n - X(X^T X)^{-1} X^T)\\
+&= In - In.X(X^TX)^{-1}X^T - X^T(X^TX)^{-1}X.In + X^T(X^TX)^{-1}XX(X^TX)^{-1}X^T \\
+&= In - X(X^TX)^{-1}X^T - X^T(X^TX)^{-1}X + X(X^TX)^{-1}X^T \\
+&= In - X^T(X^TX)^{-1}X \\
+&= In - X(X^TX)^{-1}X^T \\
+&= A
+\end{align}
+
+\setcounter{subsection}{3}
+\subsection{Question 6}
+
+\begin{align}
+\mathbb{E}_\xi [R_n(\hat{\beta})] &= \mathbb{E}_\xi \left[ \frac{1}{n} \|A\xi\|^2 \right] \\
+&= \frac{\sigma^2}{n} \text{tr}(A^T A) \\
+&= \frac{\sigma^2}{n} \text{tr}(A)
+\end{align}
+
+Let's compute $\mathrm{tr}(A)$. \\
+We know that $A = I_n - X(X^T X)^{-1} X^T$ from Question 5. So,
+
+\begin{align}
+\mathrm{tr}(A) &= \mathrm{tr}(I_n - X(X^T X)^{-1} X^T) \label{eq:64} \\
+&= \mathrm{tr}(I_n) - \mathrm{tr}(X(X^T X)^{-1} X^T) \label{eq:65} \\
+&= n - \mathrm{tr}(X(X^T X)^{-1} X^T) \label{eq:66} \\
+&= n - d \label{eq:67}
+\end{align}
+
+The $\mathrm{tr}(X(X^T X)^{-1} X^T)$ equals $d$, the rank of the projection matrix $X(X^T X)^{-1} X^T$.
+
+Finally, we can write:
+\begin{align}
+\mathbb{E}[R_n(\hat{\theta})] &= \frac{\sigma^2}{n} (n - d) \label{eq:68} \\
+&= \left(1 - \frac{d}{n} \right) \sigma^2
+\end{align}
+
+\subsection{Question 7}
+
+\begin{align}
+\mathbb{E} \left[ \frac{\|Y - X\hat{\theta}\|^2}{n - d} \right] &= \frac{1}{n - d}.E\left[\|Y - X\hat{\theta}\|^2\right] \\
+\end{align}
+
+We know that, 
+\begin{align}
+\mathbb{E}[R_n(\hat{\theta})] &= \frac{n - d}{n} \sigma^2 \\
+and \\
+\mathbb{E}[R_n(\hat{\theta})] &= \mathbb{E} \left[ \frac{1}{n}\|Y - X\hat{\theta}\|^2 \right] \\
+=> \mathbb{E} \left[ \frac{1}{n}\|Y - X\hat{\theta}\|^2 \right] &= \frac{n - d}{n} \sigma^2 \\
+=> \mathbb{E} \left[ \|Y - X\hat{\theta}\|^2 \right] &= (n - d) \sigma^2 \\
+=> \mathbb{E} \left[ \frac{\|Y - X\hat{\theta}\|^2}{n - d} \right] &= \frac{(n - d) \sigma^2}{n - d} \\
+&= \sigma^2 
+\end{align}
+
+This shows that $\frac{\|Y - X\hat{\theta}\|^2}{n - d}$ is an unbiased estimator of $\sigma^2$.
+
+\end{document}
